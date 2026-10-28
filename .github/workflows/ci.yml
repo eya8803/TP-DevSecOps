@@ -36,3 +36,4 @@ jobs:
       # Construire le projet avec Maven
       - name: Build Java project with Maven
         run: mvn clean package
+        
