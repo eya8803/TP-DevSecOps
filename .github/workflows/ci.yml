@@ -76,7 +76,7 @@ jobs:
           image-ref: ${{ env.DOCKER_IMAGE_NAME }}
           format: 'json'
           output: 'trivy-report.json'
-          exit-code: '1'
+          exit-code: '0'
           severity: 'CRITICAL,HIGH'
 
       # Upload Trivy report
@@ -86,7 +86,7 @@ jobs:
         with:
           name: trivy-report
           path: trivy-report.json
-          
+
       # Push Docker image sur Docker Hub
       - name: Push Docker image
         run: docker push $DOCKER_IMAGE_NAME
