@@ -24,7 +24,7 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-      
+
       # Gitleaks scan (before compilation)
       - name: Run Gitleaks scan
         uses: zricethezav/gitleaks-action@v2
@@ -35,8 +35,7 @@ jobs:
         with:
           name: gitleaks-report
           path: results.sarif
-      
- 
+
       # Compiler le code Java
       - name: Compile Java
         run: mvn compile
@@ -44,7 +43,7 @@ jobs:
       # Construire le projet avec Maven
       - name: Build Java project with Maven
         run: mvn clean package
-      
+
       # Login Docker Hub
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -55,15 +54,8 @@ jobs:
       # Build Docker image
       - name: Build Docker image
         run: docker build -t $DOCKER_IMAGE_NAME .
-            - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build Docker image
-        run: docker build -t $DOCKER_IMAGE_NAME .
-
+      # Test Docker image
       - name: Test Docker image locally
         run: |
           docker run -d --name democyber-test -p 8080:8080 $DOCKER_IMAGE_NAME
@@ -73,7 +65,6 @@ jobs:
           docker stop democyber-test
           docker rm democyber-test
 
+      # Détails de l'image
       - name: Show image details
         run: docker images $DOCKER_IMAGE_NAME
-      
-      
